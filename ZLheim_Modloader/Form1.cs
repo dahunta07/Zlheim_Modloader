@@ -38,7 +38,7 @@ namespace ZLheim_Modloader
                 TextShade.WHITE
                 );
 
-            pictureBox_TitleGraphic.BackColor = Color.Transparent;
+            pictureBox1.BackColor = Color.Transparent;
         }
 
         private static string GetApplictionInstallPath(string nameOfAppToFind)
@@ -130,45 +130,38 @@ namespace ZLheim_Modloader
         }
 
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            ValheimGameFolder = LocateValhiemDirectory();
-            materialSingleLineTextField_ValhiemDirectoryStatus.Text = ValheimGameFolder;
-
-            if (GetValhiemPlusInstallStatus(ValheimGameFolder))
-            {
-                materialSingleLineTextFieldValhiemPlusInstallStatus.Text = "Valhiem Plus is Installed";
-            }
-            else
-            {
-                materialSingleLineTextFieldValhiemPlusInstallStatus.Text = "Valhiem Plus is not Installed!";
-            }
-        }
-
-
-
-
-
-
-
         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void materialSingleLineTextField1_Click(object sender, EventArgs e)
-        {
 
-        }
-
-        private void materialSingleLineTextField1_Click_1(object sender, EventArgs e)
-        {
-
-        }
 
         private void materialLabel1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void materialLabel3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+        private void Form1_Load_1(object sender, EventArgs e)
+        {
+            ValheimGameFolder = LocateValhiemDirectory();
+            materialLabel4.Text = ValheimGameFolder;
+
+            if (GetValhiemPlusInstallStatus(ValheimGameFolder))
+            {
+                materialLabel5.Text = "Valhiem Plus is Installed";
+            }
+            else
+            {
+                materialLabel5.Text = "Valhiem Plus is not Installed!";
+            }
         }
     }
 }
