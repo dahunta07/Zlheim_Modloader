@@ -63,6 +63,36 @@ namespace ZLheim_Modloader.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap download {
+            get {
+                object obj = ResourceManager.GetObject("download", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap folder_sword_icon {
+            get {
+                object obj = ResourceManager.GetObject("folder-sword-icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Line1 {
+            get {
+                object obj = ResourceManager.GetObject("Line1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Logo_ZLalheim_Small {
             get {
                 object obj = ResourceManager.GetObject("Logo_ZLalheim_Small", resourceCulture);
@@ -76,6 +106,26 @@ namespace ZLheim_Modloader.Properties {
         internal static System.Drawing.Bitmap Logo_ZLalheim_w300 {
             get {
                 object obj = ResourceManager.GetObject("Logo_ZLalheim_w300", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap output_onlinepngtools_32 {
+            get {
+                object obj = ResourceManager.GetObject("output-onlinepngtools_32", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap output_onlinepngtools_w64 {
+            get {
+                object obj = ResourceManager.GetObject("output-onlinepngtools_w64", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
