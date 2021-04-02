@@ -47,9 +47,12 @@
             this.BrowseFolderButton = new MaterialSkin.Controls.MaterialRaisedButton();
             this.LaunchStatus_Label = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel10 = new MaterialSkin.Controls.MaterialLabel();
-            this.materialLabel11 = new MaterialSkin.Controls.MaterialLabel();
+            this.MapSyncStatus_Label = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel12 = new MaterialSkin.Controls.MaterialLabel();
             this.materialLabel13 = new MaterialSkin.Controls.MaterialLabel();
+            this.InstallMapSync_Button = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.UninstallMapSync_Button = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.MapSyncInstalledVersion_Label = new MaterialSkin.Controls.MaterialLabel();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -300,19 +303,19 @@
             this.materialLabel10.Text = "Map Sync";
             this.materialLabel10.Click += new System.EventHandler(this.materialLabel10_Click);
             // 
-            // materialLabel11
+            // MapSyncStatus_Label
             // 
-            this.materialLabel11.AutoSize = true;
-            this.materialLabel11.Depth = 0;
-            this.materialLabel11.Font = new System.Drawing.Font("Roboto", 11F);
-            this.materialLabel11.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel11.Location = new System.Drawing.Point(444, 408);
-            this.materialLabel11.MouseState = MaterialSkin.MouseState.HOVER;
-            this.materialLabel11.Name = "materialLabel11";
-            this.materialLabel11.Size = new System.Drawing.Size(100, 19);
-            this.materialLabel11.TabIndex = 22;
-            this.materialLabel11.Text = "Coming Soon";
-            this.materialLabel11.Click += new System.EventHandler(this.materialLabel11_Click);
+            this.MapSyncStatus_Label.AutoSize = true;
+            this.MapSyncStatus_Label.Depth = 0;
+            this.MapSyncStatus_Label.Font = new System.Drawing.Font("Roboto", 11F);
+            this.MapSyncStatus_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.MapSyncStatus_Label.Location = new System.Drawing.Point(444, 408);
+            this.MapSyncStatus_Label.MouseState = MaterialSkin.MouseState.HOVER;
+            this.MapSyncStatus_Label.Name = "MapSyncStatus_Label";
+            this.MapSyncStatus_Label.Size = new System.Drawing.Size(100, 19);
+            this.MapSyncStatus_Label.TabIndex = 22;
+            this.MapSyncStatus_Label.Text = "Coming Soon";
+            this.MapSyncStatus_Label.Click += new System.EventHandler(this.materialLabel11_Click);
             // 
             // materialLabel12
             // 
@@ -325,7 +328,8 @@
             this.materialLabel12.Name = "materialLabel12";
             this.materialLabel12.Size = new System.Drawing.Size(36, 19);
             this.materialLabel12.TabIndex = 23;
-            this.materialLabel12.Text = "v0.1";
+            this.materialLabel12.Text = "v0.2";
+            this.materialLabel12.Click += new System.EventHandler(this.materialLabel12_Click);
             // 
             // materialLabel13
             // 
@@ -340,12 +344,60 @@
             this.materialLabel13.TabIndex = 24;
             this.materialLabel13.Text = "ModLoader";
             // 
+            // InstallMapSync_Button
+            // 
+            this.InstallMapSync_Button.AutoSize = true;
+            this.InstallMapSync_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.InstallMapSync_Button.Depth = 0;
+            this.InstallMapSync_Button.Icon = null;
+            this.InstallMapSync_Button.Location = new System.Drawing.Point(634, 400);
+            this.InstallMapSync_Button.MouseState = MaterialSkin.MouseState.HOVER;
+            this.InstallMapSync_Button.Name = "InstallMapSync_Button";
+            this.InstallMapSync_Button.Primary = true;
+            this.InstallMapSync_Button.Size = new System.Drawing.Size(75, 36);
+            this.InstallMapSync_Button.TabIndex = 25;
+            this.InstallMapSync_Button.Text = "Install";
+            this.InstallMapSync_Button.UseVisualStyleBackColor = true;
+            this.InstallMapSync_Button.Click += new System.EventHandler(this.InstallMapSync_Button_Click);
+            // 
+            // UninstallMapSync_Button
+            // 
+            this.UninstallMapSync_Button.AutoSize = true;
+            this.UninstallMapSync_Button.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.UninstallMapSync_Button.Depth = 0;
+            this.UninstallMapSync_Button.Icon = null;
+            this.UninstallMapSync_Button.Location = new System.Drawing.Point(715, 400);
+            this.UninstallMapSync_Button.MouseState = MaterialSkin.MouseState.HOVER;
+            this.UninstallMapSync_Button.Name = "UninstallMapSync_Button";
+            this.UninstallMapSync_Button.Primary = true;
+            this.UninstallMapSync_Button.Size = new System.Drawing.Size(94, 36);
+            this.UninstallMapSync_Button.TabIndex = 26;
+            this.UninstallMapSync_Button.Text = "Uninstall";
+            this.UninstallMapSync_Button.UseVisualStyleBackColor = true;
+            this.UninstallMapSync_Button.Click += new System.EventHandler(this.UninstallMapSync_Button_Click);
+            // 
+            // MapSyncInstalledVersion_Label
+            // 
+            this.MapSyncInstalledVersion_Label.AutoSize = true;
+            this.MapSyncInstalledVersion_Label.Depth = 0;
+            this.MapSyncInstalledVersion_Label.Font = new System.Drawing.Font("Roboto", 11F);
+            this.MapSyncInstalledVersion_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.MapSyncInstalledVersion_Label.Location = new System.Drawing.Point(172, 408);
+            this.MapSyncInstalledVersion_Label.MouseState = MaterialSkin.MouseState.HOVER;
+            this.MapSyncInstalledVersion_Label.Name = "MapSyncInstalledVersion_Label";
+            this.MapSyncInstalledVersion_Label.Size = new System.Drawing.Size(70, 19);
+            this.MapSyncInstalledVersion_Label.TabIndex = 27;
+            this.MapSyncInstalledVersion_Label.Text = "MapSync";
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(848, 615);
+            this.Controls.Add(this.MapSyncInstalledVersion_Label);
+            this.Controls.Add(this.UninstallMapSync_Button);
+            this.Controls.Add(this.InstallMapSync_Button);
             this.Controls.Add(this.materialLabel13);
             this.Controls.Add(this.materialLabel12);
-            this.Controls.Add(this.materialLabel11);
+            this.Controls.Add(this.MapSyncStatus_Label);
             this.Controls.Add(this.materialLabel10);
             this.Controls.Add(this.LaunchStatus_Label);
             this.Controls.Add(this.BrowseFolderButton);
@@ -393,9 +445,12 @@
         private MaterialSkin.Controls.MaterialRaisedButton BrowseFolderButton;
         private MaterialSkin.Controls.MaterialLabel LaunchStatus_Label;
         private MaterialSkin.Controls.MaterialLabel materialLabel10;
-        private MaterialSkin.Controls.MaterialLabel materialLabel11;
+        private MaterialSkin.Controls.MaterialLabel MapSyncStatus_Label;
         private MaterialSkin.Controls.MaterialLabel materialLabel12;
         private MaterialSkin.Controls.MaterialLabel materialLabel13;
+        private MaterialSkin.Controls.MaterialRaisedButton InstallMapSync_Button;
+        private MaterialSkin.Controls.MaterialRaisedButton UninstallMapSync_Button;
+        private MaterialSkin.Controls.MaterialLabel MapSyncInstalledVersion_Label;
     }
 }
 

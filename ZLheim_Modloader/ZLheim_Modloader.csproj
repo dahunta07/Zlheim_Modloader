@@ -117,10 +117,14 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Line1.png" />
+    <Content Include="LocalMods\MapSync\ValheimMapSyncBepinex.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Logo_ZLalheim_Small.png" />
     <None Include="Resources\output-onlinepngtools_w64.png" />
     <None Include="Resources\output-onlinepngtools_32.png" />
     <Content Include="ValheimPlus-ValheimPlus-9.6.0.png.256x256_q85.ico" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

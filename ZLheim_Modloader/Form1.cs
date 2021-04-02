@@ -39,6 +39,12 @@ namespace ZLheim_Modloader
         private static string LatestValheimPlusVersion;
         private static string LaunchStatus = "";
 
+        private static string MapSyncStatus;
+        private static string MapSyncInstalledVersion;
+        private static string MapSyncLatestVersion;
+        private static string MapSyncDll;
+
+
         private dynamic JsonResponse;
         private bool downloadComplete = false;
 
@@ -132,6 +138,12 @@ namespace ZLheim_Modloader
             LaunchStatus_Label.Text = LaunchStatus; //Game Launch Status
             LaunchStatus_Label.Refresh();
 
+
+            MapSyncStatus_Label.Text = MapSyncStatus;
+            MapSyncStatus_Label.Refresh();
+            MapSyncInstalledVersion_Label.Text = MapSyncInstalledVersion;
+            MapSyncInstalledVersion_Label.Refresh();
+
         }
 
         private void LocateValheimDirectory()
@@ -203,6 +215,27 @@ namespace ZLheim_Modloader
             else
             {
                 ValheimPlusVersion = "-";
+                UpdateUI();
+            }
+
+        }
+
+        private void GetMapSyncVersion()
+        {
+
+            MapSyncDll = $"{ValheimGameFolder}\\BepInEx\\plugins\\ValheimMapSyncBepinex.dll";
+
+            if (File.Exists(MapSyncDll))
+            {
+                var FileDetail = FileVersionInfo.GetVersionInfo(MapSyncDll);
+                MapSyncInstalledVersion = FileDetail.FileVersion;
+                MapSyncStatus = "Installed";
+                UpdateUI();
+            }
+            else
+            {
+                MapSyncInstalledVersion = "-";
+                MapSyncStatus = "Uninstalled";
                 UpdateUI();
             }
 
@@ -326,7 +359,7 @@ namespace ZLheim_Modloader
             
         }
 
-    private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
             materialProgressBar1.Value = e.ProgressPercentage;
         }
@@ -337,6 +370,7 @@ namespace ZLheim_Modloader
             UpdateUI();
             downloadComplete = true;
         }
+
         private void InstallValheimPlus()
         {
             GetLatestValheimPlusVersion();
@@ -453,6 +487,59 @@ namespace ZLheim_Modloader
             GetValheimPlusInstallStatus();
         }
 
+        private void UninstallMapSync()
+        {
+
+            try
+            {
+                File.Delete(MapSyncDll);
+            }
+            catch
+            {
+                MapSyncStatus = "Failed to Uninstall!";
+                UpdateUI();
+            }
+
+            GetMapSyncVersion();
+        }
+
+        private void InstallMapSync()
+        {
+
+            string CurrentDirectory = Directory.GetCurrentDirectory();
+            string DesinationDirectory = $"{ValheimGameFolder}\\BepInEx\\plugins";
+            string MapSyncSourcePath = $"{CurrentDirectory}\\LocalMods\\MapSync";
+
+            //File copy
+            MapSyncStatus = "Copying Files...";
+            UpdateUI();
+
+
+            var files = Directory.GetFiles(MapSyncSourcePath);
+
+
+
+            try { 
+            //Copy all the files & Replaces any files with the same name
+                foreach (string file in files)
+                {
+                    string name = System.IO.Path.GetFileName(file);
+                    string dest = System.IO.Path.Combine(DesinationDirectory, name);
+                    File.Copy(file, dest, true);
+                }
+            }
+            catch
+            {
+                MapSyncStatus = "Failed to copy Files!";
+                UpdateUI();
+            }
+
+            MapSyncStatus = "Installation Complete";
+            UpdateUI();
+
+            GetMapSyncVersion();
+        }
+
 
         private void pictureBox1_Click(object sender, EventArgs e)
         {
@@ -483,6 +570,7 @@ namespace ZLheim_Modloader
             GetValheimPlusInstallStatus();
             GetValheimPlusVersion();
             GetLatestValheimPlusVersion();
+            GetMapSyncVersion();
 
         }
 
@@ -541,6 +629,21 @@ namespace ZLheim_Modloader
         }
 
         private void materialLabel11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void InstallMapSync_Button_Click(object sender, EventArgs e)
+        {
+            InstallMapSync();
+        }
+
+        private void UninstallMapSync_Button_Click(object sender, EventArgs e)
+        {
+            UninstallMapSync();
+        }
+
+        private void materialLabel12_Click(object sender, EventArgs e)
         {
 
         }
