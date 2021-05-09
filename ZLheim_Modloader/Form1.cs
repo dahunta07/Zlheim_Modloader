@@ -11,50 +11,53 @@ using System.Windows.Forms;
 
 using System.IO;
 using System.IO.Compression;
-using System.Collections;
 using MaterialSkin;
 using MaterialSkin.Controls;
 using Microsoft.Win32;
 using System.Diagnostics;
-using Octokit;
 using RestSharp;
 using RestSharp.Authenticators;
 using Newtonsoft.Json;
 using System.Net;
 using System.Management;
+using Gameloop.Vdf;
+using Onova;
 
 namespace ZLheim_Modloader
 {
-    
+
     public partial class Form1 : MaterialForm
     {
 
-        private const string DefaultSteamInstallDir = @"C:\Program Files (x86)\Steam\steamapps\common\Valheim";
+        private const string DefaultSteamInstallDir = @"C:\Program Files (x86)\Steam\steamapps\common\Valheim\";
         private static FileVersionInfo ValheimPlusFileDetail;
 
         private static string ValheimGameFolder;
         private static string ValheimPlusDll;
         private static string ValheimPlusInstallStatus;
-        private static string ValheimPlusVersion; 
+        private static string ValheimPlusVersion;
         private static string LatestValheimPlusVersion;
         private static string LaunchStatus = "";
+
+        private string ZLMVersionFile;
+        private static string ZLMInstallStatus;
+        private static string ZLMVersion;
+        private static string LatestZLMVersion;
 
         private static string MapSyncStatus;
         private static string MapSyncInstalledVersion;
         private static string MapSyncLatestVersion;
         private static string MapSyncDll;
 
-
         private dynamic JsonResponse;
         private bool downloadComplete = false;
 
-
-        
         private static string TempPath = Path.GetTempPath();
         private static string ZipFullPath = $"{TempPath}WindowsClient.zip";
         private static string ZipExtractionPath = $"{TempPath}WindowsClient";
+        
 
-
+        private string[] ModDllList;
 
 
         public Form1()
@@ -138,11 +141,17 @@ namespace ZLheim_Modloader
             LaunchStatus_Label.Text = LaunchStatus; //Game Launch Status
             LaunchStatus_Label.Refresh();
 
+            ZLM_InstalledVersion_Label.Text = ZLMVersion;
+            ZLM_InstalledVersion_Label.Refresh();
+            ZLM_LatestVersion_Label.Text = LatestZLMVersion;
+            ZLM_LatestVersion_Label.Refresh();
+            ZLM_Status_Label.Text = ZLMInstallStatus;
+            ZLM_Status_Label.Refresh();
 
-            MapSyncStatus_Label.Text = MapSyncStatus;
-            MapSyncStatus_Label.Refresh();
-            MapSyncInstalledVersion_Label.Text = MapSyncInstalledVersion;
-            MapSyncInstalledVersion_Label.Refresh();
+            //MapSyncStatus_Label.Text = MapSyncStatus;
+            //MapSyncStatus_Label.Refresh();
+            //MapSyncInstalledVersion_Label.Text = MapSyncInstalledVersion;
+            //MapSyncInstalledVersion_Label.Refresh();
 
         }
 
@@ -153,12 +162,22 @@ namespace ZLheim_Modloader
             {
                 ValheimGameFolder = DefaultSteamInstallDir;
                 UpdateUI();
+                return;
             }
-            else
+
+
+            var SteamInstallPath = Path.GetDirectoryName(GetSteamExe());
+
+            if (null == SteamInstallPath)
             {
-                ValheimGameFolder = "Unable to Locate Valheim Installation folder. Please select Valeim Install location";
+                ValheimGameFolder = "Unable to Locate Steam Installation!";
                 UpdateUI();
+                return;
             }
+
+
+            ValheimGameFolder = "Unable to Locate Valheim Installation folder. Please select Valeim Install location";
+            UpdateUI();
 
         }
 
@@ -174,7 +193,7 @@ namespace ZLheim_Modloader
                 ValheimGameFolder = folderDlg.SelectedPath;
                 Environment.SpecialFolder root = folderDlg.RootFolder;
             }
-            
+
 
             GetValheimPlusInstallStatus();
             GetValheimPlusVersion();
@@ -199,7 +218,7 @@ namespace ZLheim_Modloader
                 ValheimPlusVersion = "-";
                 UpdateUI();
             }
-            
+
         }
 
         private void GetValheimPlusVersion()
@@ -235,16 +254,16 @@ namespace ZLheim_Modloader
             else
             {
                 MapSyncInstalledVersion = "-";
-                MapSyncStatus = "Uninstalled";
+                MapSyncStatus = "Not Installed";
                 UpdateUI();
             }
 
         }
 
+
+
         private void GetLatestValheimPlusVersion()
         {
-
-
 
             var client = new RestClient("https://api.github.com");
             client.Authenticator = new HttpBasicAuthenticator("username", "password");
@@ -255,9 +274,6 @@ namespace ZLheim_Modloader
             JsonResponse = JsonConvert.DeserializeObject(response.Content);
             LatestValheimPlusVersion = JsonResponse.tag_name;
             UpdateUI();
-
-
-
 
         }
 
@@ -270,14 +286,14 @@ namespace ZLheim_Modloader
 
             if (Directory.Exists(ZipExtractionPath))
             {
-                Directory.Delete(ZipExtractionPath,true);
+                Directory.Delete(ZipExtractionPath, true);
             }
 
         }
 
         public string GetSteamExe()
         {
-  
+
             string steam32 = "SOFTWARE\\VALVE\\";
             string steam64 = "SOFTWARE\\Wow6432Node\\Valve\\";
             string steam32exe;
@@ -304,7 +320,7 @@ namespace ZLheim_Modloader
 
                         }
                     }
-                    
+
                 }
             }
 
@@ -331,20 +347,16 @@ namespace ZLheim_Modloader
 
             //if unable to find
             return null;
-
-
-
-
         }
 
         private void StartValheim()
         {
             string SteamExe = GetSteamExe();
 
-          // Use ProcessStartInfo class
+            // Use ProcessStartInfo class
             ProcessStartInfo startInfo = new ProcessStartInfo();
 
-           
+
             if (null == SteamExe)
             {
                 LaunchStatus = "Unable to locate Steam Exe.. Launch Valheim Manually";
@@ -356,7 +368,7 @@ namespace ZLheim_Modloader
 
 
             Process.Start(startInfo);
-            
+
         }
 
         private void ProgressChanged(object sender, DownloadProgressChangedEventArgs e)
@@ -366,8 +378,6 @@ namespace ZLheim_Modloader
 
         private void Completed(object sender, AsyncCompletedEventArgs e)
         {
-            ValheimPlusInstallStatus = "Download completed!";
-            UpdateUI();
             downloadComplete = true;
         }
 
@@ -379,6 +389,7 @@ namespace ZLheim_Modloader
 
             string ValheimPlusDownloadURL = $"https://github.com/valheimPlus/ValheimPlus/releases/download/{LatestValheimPlusVersion}/WindowsClient.zip";
 
+        
             //Download
 
             if (File.Exists(ZipFullPath))
@@ -418,7 +429,7 @@ namespace ZLheim_Modloader
             {
                 if (Directory.Exists(ZipExtractionPath))
                 {
-                   Directory.Delete(ZipExtractionPath);
+                    Directory.Delete(ZipExtractionPath);
                 }
 
                 ZipFile.ExtractToDirectory(ZipFullPath, ZipExtractionPath);
@@ -426,7 +437,7 @@ namespace ZLheim_Modloader
             }
             catch
             {
-               ValheimPlusInstallStatus = "Extraction Failed!";
+                ValheimPlusInstallStatus = "Extraction Failed!";
                 UpdateUI();
                 ExitandCleanup();
                 return;
@@ -487,61 +498,188 @@ namespace ZLheim_Modloader
             GetValheimPlusInstallStatus();
         }
 
-        private void UninstallMapSync()
+
+// TODO!!!
+
+        private void GetLatestZLMVersion()
         {
+            var client = new RestClient("https://api.github.com");
+            client.Authenticator = new HttpBasicAuthenticator("username", "password");
+
+            var request = new RestRequest("/repos/dahunta07/ZLheim_Modpack/releases/latest", DataFormat.Json);
+
+            var response = client.Get(request);
+            JsonResponse = JsonConvert.DeserializeObject(response.Content);
+            LatestZLMVersion = JsonResponse.tag_name;
+            UpdateUI();
+        }
+
+        private void GetZLMVersion()
+        {
+
+            GetZLMInstallStatus();
+            if (File.Exists(ZLMVersionFile))
+            {
+                ZLMVersion = System.IO.File.ReadAllText(ZLMVersionFile);
+                UpdateUI();
+            }
+            else
+            {
+                ZLMVersion = "-";
+                UpdateUI();
+            }
+
+        }
+
+        private void GetZLMInstallStatus()
+        {
+            ZLMVersionFile = $"{ValheimGameFolder}\\BepInEx\\version.txt";
+
+            if (File.Exists(ZLMVersionFile))
+            {
+                ZLMInstallStatus = "Installed";
+                UpdateUI();
+            }
+            else
+            {
+                ZLMInstallStatus = "Not Installed";
+                ZLMVersion = "-";
+                UpdateUI();
+            }
+
+        }
+
+        private void InstallZLM()
+        {
+            GetLatestZLMVersion();
+            ZLMInstallStatus = "Download starting";
+            UpdateUI();
+
+            string ZLMDownloadURL = $"https://github.com/dahunta07/ZLheim_Modpack/releases/download/{LatestZLMVersion}/ZLM.zip";
+            string ZLMZipFullPath = $"{TempPath}ZLM.zip";
+            string ZLMZipExtractionPath = $"{TempPath}ZLM";
+            
+
+            //Download
+
+            if (File.Exists(ZLMZipFullPath))
+            {
+                File.Delete(ZLMZipFullPath);
+            }
+
+
 
             try
             {
-                File.Delete(MapSyncDll);
+                WebClient webClient = new WebClient();
+                webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
+                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
+                webClient.DownloadFileAsync(new Uri(ZLMDownloadURL), ZLMZipFullPath);
             }
             catch
             {
-                MapSyncStatus = "Failed to Uninstall!";
+                ZLMInstallStatus = "Download Failed!";
                 UpdateUI();
+
             }
 
-            GetMapSyncVersion();
-        }
 
-        private void InstallMapSync()
-        {
+            while (!downloadComplete)
+            {
+                System.Windows.Forms.Application.DoEvents();
+            }
 
-            string CurrentDirectory = Directory.GetCurrentDirectory();
-            string DesinationDirectory = $"{ValheimGameFolder}\\BepInEx\\plugins";
-            string MapSyncSourcePath = $"{CurrentDirectory}\\LocalMods\\MapSync";
+            downloadComplete = false;
+
+            //Extraction
+            ZLMInstallStatus = "Extracting...";
+            UpdateUI();
+
+            try
+            {
+                if (Directory.Exists(ZLMZipExtractionPath))
+                {
+                    Directory.Delete(ZLMZipExtractionPath);
+                }
+
+                ZipFile.ExtractToDirectory(ZLMZipFullPath, ZLMZipExtractionPath);
+
+            }
+            catch
+            {
+                ZLMInstallStatus = "Extraction Failed!";
+                UpdateUI();
+                return;
+            }
+
 
             //File copy
-            MapSyncStatus = "Copying Files...";
+            ZLMInstallStatus = "Copying Files...";
             UpdateUI();
 
 
-            var files = Directory.GetFiles(MapSyncSourcePath);
+            try
+            {
 
+                //Now Create all of the directories
+                foreach (string dirPath in Directory.GetDirectories(ZLMZipExtractionPath, "*", SearchOption.AllDirectories))
+                    Directory.CreateDirectory(dirPath.Replace(ZLMZipExtractionPath, $"{ValheimGameFolder}\\BepInEx"));
 
+                //Copy all the files & Replaces any files with the same name
+                foreach (string newPath in Directory.GetFiles(ZLMZipExtractionPath, "*.*",
+                    SearchOption.AllDirectories))
+                    File.Copy(newPath, newPath.Replace(ZLMZipExtractionPath, $"{ValheimGameFolder}\\BepInEx"), true);
 
-            try { 
-            //Copy all the files & Replaces any files with the same name
-                foreach (string file in files)
-                {
-                    string name = System.IO.Path.GetFileName(file);
-                    string dest = System.IO.Path.Combine(DesinationDirectory, name);
-                    File.Copy(file, dest, true);
-                }
             }
             catch
             {
-                MapSyncStatus = "Failed to copy Files!";
+                ZLMInstallStatus = "Copy Failed!";
                 UpdateUI();
+
+                //Cleanup
+                if (File.Exists(ZLMZipFullPath))
+                {
+                    File.Delete(ZLMZipFullPath);
+                }
+
+                if (Directory.Exists(ZLMZipExtractionPath))
+                {
+                    Directory.Delete(ZLMZipExtractionPath, true);
+                }
+
+                return;
             }
 
-            MapSyncStatus = "Installation Complete";
-            UpdateUI();
+            ZLMInstallStatus = "Installation Complete";
 
-            GetMapSyncVersion();
+            UpdateUI();
+            GetZLMVersion();
+
+            //Cleanup
+            if (File.Exists(ZLMZipFullPath))
+            {
+                File.Delete(ZLMZipFullPath);
+            }
+
+            if (Directory.Exists(ZLMZipExtractionPath))
+            {
+                Directory.Delete(ZLMZipExtractionPath, true);
+            }
+        }
+
+        private void GetModList()
+        {
+            string CurrentDirectory = Directory.GetCurrentDirectory();
+            string DesinationDirectory = $"{ValheimGameFolder}\\BepInEx\\plugins";
+            string SourcePath = $"{CurrentDirectory}\\LocalMods\\";
+
+            ModDllList = Directory.GetFiles(SourcePath);
+
+
         }
 
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+         private void pictureBox1_Click(object sender, EventArgs e)
         {
 
         }
@@ -570,7 +708,9 @@ namespace ZLheim_Modloader
             GetValheimPlusInstallStatus();
             GetValheimPlusVersion();
             GetLatestValheimPlusVersion();
-            GetMapSyncVersion();
+            GetZLMInstallStatus();
+            GetZLMVersion();
+            GetLatestZLMVersion();
 
         }
 
@@ -600,6 +740,13 @@ namespace ZLheim_Modloader
         {
 
             InstallValheimPlus();
+
+        }
+
+        private void ZLM_Install_Button_Click(object sender, EventArgs e)
+        {
+
+            InstallZLM();
 
         }
 
@@ -633,20 +780,35 @@ namespace ZLheim_Modloader
 
         }
 
-        private void InstallMapSync_Button_Click(object sender, EventArgs e)
-        {
-            InstallMapSync();
-        }
-
-        private void UninstallMapSync_Button_Click(object sender, EventArgs e)
-        {
-            UninstallMapSync();
-        }
 
         private void materialLabel12_Click(object sender, EventArgs e)
         {
 
         }
+
+        private void LaunchStatus_Label_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialProgressBar1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void materialLabel10_Click_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void EID_Status_Label_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
     }
 }
 
