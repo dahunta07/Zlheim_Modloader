@@ -30,13 +30,8 @@ namespace ZLheim_Modloader
     {
 
         private const string DefaultSteamInstallDir = @"C:\Program Files (x86)\Steam\steamapps\common\Valheim\";
-        private static FileVersionInfo ValheimPlusFileDetail;
-
         private static string ValheimGameFolder;
-        private static string ValheimPlusDll;
-        private static string ValheimPlusInstallStatus;
-        private static string ValheimPlusVersion;
-        private static string LatestValheimPlusVersion;
+
         private static string LaunchStatus = "";
 
         private string ZLMVersionFile;
@@ -44,18 +39,13 @@ namespace ZLheim_Modloader
         private static string ZLMVersion;
         private static string LatestZLMVersion;
 
-        private static string MapSyncStatus;
-        private static string MapSyncInstalledVersion;
-        private static string MapSyncLatestVersion;
-        private static string MapSyncDll;
-
         private dynamic JsonResponse;
         private bool downloadComplete = false;
 
         private static string TempPath = Path.GetTempPath();
         private static string ZipFullPath = $"{TempPath}WindowsClient.zip";
         private static string ZipExtractionPath = $"{TempPath}WindowsClient";
-        
+
 
         private string[] ModDllList;
 
@@ -132,12 +122,6 @@ namespace ZLheim_Modloader
         {
             materialLabel4.Text = ValheimGameFolder; //Game install Status
             materialLabel4.Refresh();
-            materialLabel5.Text = ValheimPlusInstallStatus; //Valhiem Plus Install Status
-            materialLabel5.Refresh();
-            materialLabel7.Text = ValheimPlusVersion; //Valheim Plus Version Installed
-            materialLabel7.Refresh();
-            materialLabel9.Text = LatestValheimPlusVersion; //Latest Valheim Plus Version from github
-            materialLabel9.Refresh();
             LaunchStatus_Label.Text = LaunchStatus; //Game Launch Status
             LaunchStatus_Label.Refresh();
 
@@ -194,88 +178,11 @@ namespace ZLheim_Modloader
                 Environment.SpecialFolder root = folderDlg.RootFolder;
             }
 
-
-            GetValheimPlusInstallStatus();
-            GetValheimPlusVersion();
-            GetLatestValheimPlusVersion();
             UpdateUI();
 
         }
 
 
-        private void GetValheimPlusInstallStatus()
-        {
-            ValheimPlusDll = $"{ValheimGameFolder}\\BepInEx\\plugins\\ValheimPlus.dll";
-
-            if (File.Exists(ValheimPlusDll))
-            {
-                ValheimPlusInstallStatus = "Installed";
-                UpdateUI();
-            }
-            else
-            {
-                ValheimPlusInstallStatus = "Not Installed";
-                ValheimPlusVersion = "-";
-                UpdateUI();
-            }
-
-        }
-
-        private void GetValheimPlusVersion()
-        {
-
-            GetValheimPlusInstallStatus();
-            if (File.Exists(ValheimPlusDll))
-            {
-                ValheimPlusFileDetail = FileVersionInfo.GetVersionInfo(ValheimPlusDll);
-                ValheimPlusVersion = ValheimPlusFileDetail.FileVersion;
-                UpdateUI();
-            }
-            else
-            {
-                ValheimPlusVersion = "-";
-                UpdateUI();
-            }
-
-        }
-
-        private void GetMapSyncVersion()
-        {
-
-            MapSyncDll = $"{ValheimGameFolder}\\BepInEx\\plugins\\ValheimMapSyncBepinex.dll";
-
-            if (File.Exists(MapSyncDll))
-            {
-                var FileDetail = FileVersionInfo.GetVersionInfo(MapSyncDll);
-                MapSyncInstalledVersion = FileDetail.FileVersion;
-                MapSyncStatus = "Installed";
-                UpdateUI();
-            }
-            else
-            {
-                MapSyncInstalledVersion = "-";
-                MapSyncStatus = "Not Installed";
-                UpdateUI();
-            }
-
-        }
-
-
-
-        private void GetLatestValheimPlusVersion()
-        {
-
-            var client = new RestClient("https://api.github.com");
-            client.Authenticator = new HttpBasicAuthenticator("username", "password");
-
-            var request = new RestRequest("/repos/valheimPlus/ValheimPlus/releases/latest", DataFormat.Json);
-
-            var response = client.Get(request);
-            JsonResponse = JsonConvert.DeserializeObject(response.Content);
-            LatestValheimPlusVersion = JsonResponse.tag_name;
-            UpdateUI();
-
-        }
 
         private void ExitandCleanup()
         {
@@ -364,7 +271,7 @@ namespace ZLheim_Modloader
             }
 
             startInfo.FileName = SteamExe;
-            startInfo.Arguments = "-applaunch 892970 +connect 176.57.135.29:28300";
+            startInfo.Arguments = "-applaunch 892970 +connect games.maynezone.com:2456";
 
 
             Process.Start(startInfo);
@@ -381,122 +288,7 @@ namespace ZLheim_Modloader
             downloadComplete = true;
         }
 
-        private void InstallValheimPlus()
-        {
-            GetLatestValheimPlusVersion();
-            ValheimPlusInstallStatus = "Download starting";
-            UpdateUI();
 
-            string ValheimPlusDownloadURL = $"https://github.com/valheimPlus/ValheimPlus/releases/download/{LatestValheimPlusVersion}/WindowsClient.zip";
-
-        
-            //Download
-
-            if (File.Exists(ZipFullPath))
-            {
-                File.Delete(ZipFullPath);
-            }
-
-
-
-            try
-            {
-                WebClient webClient = new WebClient();
-                webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(Completed);
-                webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(ProgressChanged);
-                webClient.DownloadFileAsync(new Uri(ValheimPlusDownloadURL), ZipFullPath);
-            }
-            catch
-            {
-                ValheimPlusInstallStatus = "Download Failed!";
-                UpdateUI();
-
-            }
-
-
-            while (!downloadComplete)
-            {
-                System.Windows.Forms.Application.DoEvents();
-            }
-
-            downloadComplete = false;
-
-            //Extraction
-            ValheimPlusInstallStatus = "Extracting...";
-            UpdateUI();
-
-            try
-            {
-                if (Directory.Exists(ZipExtractionPath))
-                {
-                    Directory.Delete(ZipExtractionPath);
-                }
-
-                ZipFile.ExtractToDirectory(ZipFullPath, ZipExtractionPath);
-
-            }
-            catch
-            {
-                ValheimPlusInstallStatus = "Extraction Failed!";
-                UpdateUI();
-                ExitandCleanup();
-                return;
-            }
-
-
-            //File copy
-            ValheimPlusInstallStatus = "Copying Files...";
-
-            try
-            {
-                //foreach (var file in Directory.GetFiles(ZipExtractionPath))
-                //    File.Copy(file, Path.Combine(ValheimGameFolder, Path.GetFileName(file)), true);
-
-
-                //Now Create all of the directories
-                foreach (string dirPath in Directory.GetDirectories(ZipExtractionPath, "*",
-                    SearchOption.AllDirectories))
-                    Directory.CreateDirectory(dirPath.Replace(ZipExtractionPath, ValheimGameFolder));
-
-                //Copy all the files & Replaces any files with the same name
-                foreach (string newPath in Directory.GetFiles(ZipExtractionPath, "*.*",
-                    SearchOption.AllDirectories))
-                    File.Copy(newPath, newPath.Replace(ZipExtractionPath, ValheimGameFolder), true);
-
-            }
-            catch
-            {
-                ValheimPlusInstallStatus = "Copy Failed!";
-                UpdateUI();
-                ExitandCleanup();
-                return;
-            }
-
-            ValheimPlusInstallStatus = "Installation Complete";
-
-            UpdateUI();
-            GetValheimPlusVersion();
-
-            ExitandCleanup();
-        }
-
-        private void UninstallValheimPlus()
-        {
-
-            try
-            {
-                File.Delete(ValheimPlusDll);
-                File.Delete($"{ValheimGameFolder}\\winhttp.dll");
-            }
-            catch
-            {
-                materialLabel5.Text = "Failed to remove Valhiem Plus!";
-                UpdateUI();
-            }
-
-
-            GetValheimPlusInstallStatus();
-        }
 
 
 // TODO!!!
@@ -705,9 +497,6 @@ namespace ZLheim_Modloader
             materialLabel4.Text = ValheimGameFolder;
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 
-            GetValheimPlusInstallStatus();
-            GetValheimPlusVersion();
-            GetLatestValheimPlusVersion();
             GetZLMInstallStatus();
             GetZLMVersion();
             GetLatestZLMVersion();
@@ -720,12 +509,6 @@ namespace ZLheim_Modloader
         }
 
 
-        private void materialRaisedButton4_Click(object sender, EventArgs e)
-        {
-            UninstallValheimPlus();
-            UpdateUI();
-        }
-
         private void materialLabel8_Click(object sender, EventArgs e)
         {
 
@@ -736,12 +519,6 @@ namespace ZLheim_Modloader
 
         }
 
-        private void materialRaisedButton1_Click(object sender, EventArgs e)
-        {
-
-            InstallValheimPlus();
-
-        }
 
         private void ZLM_Install_Button_Click(object sender, EventArgs e)
         {
@@ -806,9 +583,15 @@ namespace ZLheim_Modloader
 
         }
 
+        private void ZLM_Uninstall_Button_Click(object sender, EventArgs e)
+        {
 
+            var dir = new DirectoryInfo($"{ValheimGameFolder}\\BepInEx");
+            dir.Delete(true);
+            GetZLMInstallStatus();
+            UpdateUI();
 
-
+        }
     }
 }
 
