@@ -123,7 +123,7 @@
             // materialProgressBar1
             // 
             this.materialProgressBar1.Depth = 0;
-            this.materialProgressBar1.Location = new System.Drawing.Point(298, 652);
+            this.materialProgressBar1.Location = new System.Drawing.Point(275, 584);
             this.materialProgressBar1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialProgressBar1.Name = "materialProgressBar1";
             this.materialProgressBar1.Size = new System.Drawing.Size(304, 5);
@@ -136,7 +136,7 @@
             this.materialRaisedButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.materialRaisedButton2.Depth = 0;
             this.materialRaisedButton2.Icon = null;
-            this.materialRaisedButton2.Location = new System.Drawing.Point(374, 672);
+            this.materialRaisedButton2.Location = new System.Drawing.Point(313, 595);
             this.materialRaisedButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialRaisedButton2.Name = "materialRaisedButton2";
             this.materialRaisedButton2.Primary = true;
@@ -153,13 +153,13 @@
             this.materialDivider1.Location = new System.Drawing.Point(12, 344);
             this.materialDivider1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialDivider1.Name = "materialDivider1";
-            this.materialDivider1.Size = new System.Drawing.Size(824, 237);
+            this.materialDivider1.Size = new System.Drawing.Size(824, 152);
             this.materialDivider1.TabIndex = 18;
             this.materialDivider1.Text = "materialDivider1";
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(293, 46);
+            this.pictureBox1.Location = new System.Drawing.Point(278, 29);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(298, 98);
             this.pictureBox1.TabIndex = 0;
@@ -192,7 +192,7 @@
             this.LaunchStatus_Label.Depth = 0;
             this.LaunchStatus_Label.Font = new System.Drawing.Font("Roboto", 11F);
             this.LaunchStatus_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.LaunchStatus_Label.Location = new System.Drawing.Point(368, 619);
+            this.LaunchStatus_Label.Location = new System.Drawing.Point(345, 551);
             this.LaunchStatus_Label.MouseState = MaterialSkin.MouseState.HOVER;
             this.LaunchStatus_Label.Name = "LaunchStatus_Label";
             this.LaunchStatus_Label.Size = new System.Drawing.Size(143, 19);
