@@ -36,7 +36,6 @@
             this.materialProgressBar1 = new MaterialSkin.Controls.MaterialProgressBar();
             this.materialRaisedButton2 = new MaterialSkin.Controls.MaterialRaisedButton();
             this.materialDivider1 = new MaterialSkin.Controls.MaterialDivider();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.BrowseFolderButton = new MaterialSkin.Controls.MaterialRaisedButton();
             this.LaunchStatus_Label = new MaterialSkin.Controls.MaterialLabel();
@@ -48,6 +47,7 @@
             this.ZLM_Status_Label = new MaterialSkin.Controls.MaterialLabel();
             this.ZLM_Install_Button = new MaterialSkin.Controls.MaterialRaisedButton();
             this.ZLM_Uninstall_Button = new MaterialSkin.Controls.MaterialRaisedButton();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -123,10 +123,10 @@
             // materialProgressBar1
             // 
             this.materialProgressBar1.Depth = 0;
-            this.materialProgressBar1.Location = new System.Drawing.Point(275, 584);
+            this.materialProgressBar1.Location = new System.Drawing.Point(233, 547);
             this.materialProgressBar1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialProgressBar1.Name = "materialProgressBar1";
-            this.materialProgressBar1.Size = new System.Drawing.Size(304, 5);
+            this.materialProgressBar1.Size = new System.Drawing.Size(343, 5);
             this.materialProgressBar1.TabIndex = 12;
             this.materialProgressBar1.Click += new System.EventHandler(this.materialProgressBar1_Click);
             // 
@@ -136,7 +136,7 @@
             this.materialRaisedButton2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.materialRaisedButton2.Depth = 0;
             this.materialRaisedButton2.Icon = null;
-            this.materialRaisedButton2.Location = new System.Drawing.Point(313, 595);
+            this.materialRaisedButton2.Location = new System.Drawing.Point(304, 578);
             this.materialRaisedButton2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialRaisedButton2.Name = "materialRaisedButton2";
             this.materialRaisedButton2.Primary = true;
@@ -153,17 +153,9 @@
             this.materialDivider1.Location = new System.Drawing.Point(12, 344);
             this.materialDivider1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialDivider1.Name = "materialDivider1";
-            this.materialDivider1.Size = new System.Drawing.Size(824, 152);
+            this.materialDivider1.Size = new System.Drawing.Size(824, 128);
             this.materialDivider1.TabIndex = 18;
             this.materialDivider1.Text = "materialDivider1";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(278, 29);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(298, 98);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
             // 
             // folderBrowserDialog1
             // 
@@ -192,7 +184,7 @@
             this.LaunchStatus_Label.Depth = 0;
             this.LaunchStatus_Label.Font = new System.Drawing.Font("Roboto", 11F);
             this.LaunchStatus_Label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.LaunchStatus_Label.Location = new System.Drawing.Point(345, 551);
+            this.LaunchStatus_Label.Location = new System.Drawing.Point(340, 513);
             this.LaunchStatus_Label.MouseState = MaterialSkin.MouseState.HOVER;
             this.LaunchStatus_Label.Name = "LaunchStatus_Label";
             this.LaunchStatus_Label.Size = new System.Drawing.Size(143, 19);
@@ -211,7 +203,7 @@
             this.materialLabel12.Name = "materialLabel12";
             this.materialLabel12.Size = new System.Drawing.Size(36, 19);
             this.materialLabel12.TabIndex = 23;
-            this.materialLabel12.Text = "v0.4";
+            this.materialLabel12.Text = "v1.0";
             this.materialLabel12.Click += new System.EventHandler(this.materialLabel12_Click);
             // 
             // materialLabel13
@@ -220,12 +212,13 @@
             this.materialLabel13.Depth = 0;
             this.materialLabel13.Font = new System.Drawing.Font("Roboto", 11F);
             this.materialLabel13.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.materialLabel13.Location = new System.Drawing.Point(400, 147);
+            this.materialLabel13.Location = new System.Drawing.Point(350, 130);
             this.materialLabel13.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel13.Name = "materialLabel13";
-            this.materialLabel13.Size = new System.Drawing.Size(85, 19);
+            this.materialLabel13.Size = new System.Drawing.Size(142, 19);
             this.materialLabel13.TabIndex = 24;
-            this.materialLabel13.Text = "ModLoader";
+            this.materialLabel13.Text = "Hunters ModLoader";
+            this.materialLabel13.Click += new System.EventHandler(this.materialLabel13_Click);
             // 
             // ZLM_Lable
             // 
@@ -313,6 +306,14 @@
             this.ZLM_Uninstall_Button.UseVisualStyleBackColor = true;
             this.ZLM_Uninstall_Button.Click += new System.EventHandler(this.ZLM_Uninstall_Button_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(278, 29);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(298, 98);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // Form1
             // 
             this.ClientSize = new System.Drawing.Size(848, 841);
@@ -344,8 +345,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.PictureBox pictureBox1;
         private MaterialSkin.Controls.MaterialLabel materialLabel2;
         private MaterialSkin.Controls.MaterialLabel materialLabel3;
         private MaterialSkin.Controls.MaterialLabel materialLabel4;
@@ -365,6 +364,7 @@
         private MaterialSkin.Controls.MaterialLabel ZLM_Status_Label;
         private MaterialSkin.Controls.MaterialRaisedButton ZLM_Install_Button;
         private MaterialSkin.Controls.MaterialRaisedButton ZLM_Uninstall_Button;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 

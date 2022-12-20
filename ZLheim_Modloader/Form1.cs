@@ -120,6 +120,9 @@ namespace ZLheim_Modloader
 
         private void UpdateUI()
         {
+
+           
+
             materialLabel4.Text = ValheimGameFolder; //Game install Status
             materialLabel4.Refresh();
             LaunchStatus_Label.Text = LaunchStatus; //Game Launch Status
@@ -142,7 +145,24 @@ namespace ZLheim_Modloader
         private void LocateValheimDirectory()
         {
 
-            if (Directory.Exists(DefaultSteamInstallDir))
+            string fileContents = ReadFromConfigFile();
+
+            if (string.IsNullOrEmpty(fileContents))
+            {
+                //DO Nothing
+
+ 
+            }
+            else
+            {
+                string filePath = fileContents;
+                ValheimGameFolder = Path.GetFullPath(filePath);
+                GetZLMVersion();
+                UpdateUI();
+                return;
+            }
+
+                if (Directory.Exists(DefaultSteamInstallDir))
             {
                 ValheimGameFolder = DefaultSteamInstallDir;
                 UpdateUI();
@@ -178,11 +198,64 @@ namespace ZLheim_Modloader
                 Environment.SpecialFolder root = folderDlg.RootFolder;
             }
 
+            WriteToConfigFile( ValheimGameFolder );
+
             UpdateUI();
 
         }
 
+        private void WriteToConfigFile(string text)
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.txt");
 
+            if (!File.Exists(filePath))
+            {
+                try
+                {
+                    File.Create(filePath).Dispose();
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show("An error occurred while creating config.txt.");
+                    return;
+                }
+            }
+
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filePath, false))
+                {
+                    writer.Write(text);
+                }
+            }
+            catch (IOException)
+            {
+                MessageBox.Show("An error occurred while writing to config.txt.");
+            }
+        }
+
+        private string ReadFromConfigFile()
+        {
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.txt");
+            string fileContents = "";
+
+            if (File.Exists(filePath))
+            {
+                try
+                {
+                    using (StreamReader reader = new StreamReader(filePath))
+                    {
+                        fileContents = reader.ReadToEnd();
+                    }
+                }
+                catch (IOException)
+                {
+                    MessageBox.Show("An error occurred while reading from config.txt.");
+                }
+            }
+
+            return fileContents;
+        }
 
         private void ExitandCleanup()
         {
@@ -289,9 +362,6 @@ namespace ZLheim_Modloader
         }
 
 
-
-
-// TODO!!!
 
         private void GetLatestZLMVersion()
         {
@@ -590,6 +660,11 @@ namespace ZLheim_Modloader
             dir.Delete(true);
             GetZLMInstallStatus();
             UpdateUI();
+
+        }
+
+        private void materialLabel13_Click(object sender, EventArgs e)
+        {
 
         }
     }
