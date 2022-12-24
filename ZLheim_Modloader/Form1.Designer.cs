@@ -203,7 +203,7 @@
             this.materialLabel12.Name = "materialLabel12";
             this.materialLabel12.Size = new System.Drawing.Size(36, 19);
             this.materialLabel12.TabIndex = 23;
-            this.materialLabel12.Text = "v1.0";
+            this.materialLabel12.Text = "v1.1";
             this.materialLabel12.Click += new System.EventHandler(this.materialLabel12_Click);
             // 
             // materialLabel13

@@ -206,7 +206,26 @@ namespace ZLheim_Modloader
 
         private void WriteToConfigFile(string text)
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.txt");
+            string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string folderName = "HunterModloader";
+            string configName = "config.txt";
+            string folderPath = Path.Combine(local, folderName);
+            string filePath = Path.Combine(local, folderName, configName);
+            MessageBox.Show(filePath);
+
+            if (!System.IO.File.Exists(folderPath))
+            {
+                try
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+                catch
+                {
+                    MessageBox.Show("An error occurred while creating appdata folder");
+                    return;
+                }
+            }
+
 
             if (!File.Exists(filePath))
             {
@@ -231,12 +250,19 @@ namespace ZLheim_Modloader
             catch (IOException)
             {
                 MessageBox.Show("An error occurred while writing to config.txt.");
+                return;
             }
         }
 
         private string ReadFromConfigFile()
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.txt");
+
+            string local = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            string folderName = "HunterModloader";
+            string configName = "config.txt";
+            string filePath = Path.Combine(local, folderName, configName);
+            MessageBox.Show(filePath);
+
             string fileContents = "";
 
             if (File.Exists(filePath))
@@ -485,12 +511,12 @@ namespace ZLheim_Modloader
 
                 //Now Create all of the directories
                 foreach (string dirPath in Directory.GetDirectories(ZLMZipExtractionPath, "*", SearchOption.AllDirectories))
-                    Directory.CreateDirectory(dirPath.Replace(ZLMZipExtractionPath, $"{ValheimGameFolder}\\BepInEx"));
+                    Directory.CreateDirectory(dirPath.Replace(ZLMZipExtractionPath, $"{ValheimGameFolder}"));
 
                 //Copy all the files & Replaces any files with the same name
                 foreach (string newPath in Directory.GetFiles(ZLMZipExtractionPath, "*.*",
                     SearchOption.AllDirectories))
-                    File.Copy(newPath, newPath.Replace(ZLMZipExtractionPath, $"{ValheimGameFolder}\\BepInEx"), true);
+                    File.Copy(newPath, newPath.Replace(ZLMZipExtractionPath, $"{ValheimGameFolder}"), true);
 
             }
             catch
