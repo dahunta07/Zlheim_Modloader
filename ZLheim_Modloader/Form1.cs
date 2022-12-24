@@ -211,7 +211,7 @@ namespace ZLheim_Modloader
             string configName = "config.txt";
             string folderPath = Path.Combine(local, folderName);
             string filePath = Path.Combine(local, folderName, configName);
-            MessageBox.Show(filePath);
+
 
             if (!System.IO.File.Exists(folderPath))
             {
@@ -261,7 +261,7 @@ namespace ZLheim_Modloader
             string folderName = "HunterModloader";
             string configName = "config.txt";
             string filePath = Path.Combine(local, folderName, configName);
-            MessageBox.Show(filePath);
+
 
             string fileContents = "";
 
